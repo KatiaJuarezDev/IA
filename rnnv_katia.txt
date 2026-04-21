@@ -1,0 +1,115 @@
+==============================================================
+                  
+                     KATIA JUÁREZ ARIAS
+
+==============================================================
+
+
+
+Desarrollo: El Termómetro de las Emociones (Vanilla RNN)
+
+Para resolver las misiones se utiliza la fórmula de una Vanilla RNN:
+
+h_t = x_t + 0.5 * h_(t-1)
+
+Donde:
+
+* x_t es el evento del día
+* h_(t-1) es el estado del día anterior
+* 0.5 representa la memoria (solo se conserva la mitad)
+
+---
+
+Misión 1: El Lunes Increíble
+
+Descripción de los eventos:
+Día 1: Ocurre un evento muy positivo (ganar un premio), lo que genera un alto nivel de emoción.
+Día 2–5: No ocurre ningún evento relevante, son días neutros sin cambios emocionales.
+
+Datos:
+Día 1: x1 = 10
+Día 2–5: x_t = 0
+
+Cálculo:
+Día 1: h1 = 10
+Día 2: h2 = 0 + 0.5(10) = 5
+Día 3: h3 = 0 + 0.5(5) = 2.5
+Día 4: h4 = 0 + 0.5(2.5) = 1.25
+Día 5: h5 = 0 + 0.5(1.25) = 0.625
+
+Resultado:
+El estado final es 0.625
+
+Conclusión:
+Aunque el evento inicial fue muy positivo, su efecto disminuye con el tiempo debido al factor de olvido.
+
+---
+
+Misión 2: El Rescate Emocional
+
+Descripción de los eventos:
+Día 1: Ocurre un evento negativo (enfermarse), generando un estado emocional bajo.
+Día 2: Se presenta otro evento negativo (ser regañado), empeorando el estado emocional.
+Día 3: No ocurre ningún evento relevante, pero el estado negativo previo se mantiene parcialmente.
+
+Datos:
+Día 1: x1 = -6
+Día 2: x2 = -4
+Día 3: x3 = 0
+
+Cálculo:
+Día 1: h1 = -6
+Día 2: h2 = -4 + 0.5(-6) = -7
+Día 3: h3 = 0 + 0.5(-7) = -3.5
+
+Para el Día 4:
+h4 = x4 + 0.5(-3.5) = x4 - 1.75
+
+Condición:
+Para que h4 > 0, se requiere:
+x4 > 1.75
+
+Resultado:
+El evento del Día 4 debe ser mayor a +1.75
+
+Conclusión:
+Se necesita un evento positivo suficiente para contrarrestar la memoria negativa acumulada.
+
+---
+
+Misión 3: Constancia vs. Pico
+
+Escenario A (evento único)
+
+Descripción de los eventos:
+Día 1: Ocurre un evento extremadamente positivo (por ejemplo, ganar un premio importante).
+Día 2–5: No ocurren más eventos relevantes, los días son emocionalmente neutros.
+
+Datos:
+Día 1: +10
+Día 2–5: 0
+
+Resultado final: 0.625
+
+Escenario B (eventos constantes)
+
+Descripción de los eventos:
+Día 1–5: Cada día ocurre un evento positivo moderado (por ejemplo, recibir un detalle, una buena noticia o una experiencia agradable), generando emociones positivas constantes.
+
+Datos:
+Día 1–5: +3
+
+Cálculo:
+Día 1: h1 = 3
+Día 2: h2 = 3 + 0.5(3) = 4.5
+Día 3: h3 = 3 + 0.5(4.5) = 5.25
+Día 4: h4 = 3 + 0.5(5.25) = 5.625
+Día 5: h5 = 3 + 0.5(5.625) = 5.8125
+
+Resultado final: 5.8125
+
+---
+
+Conclusión General
+
+El escenario B presenta un estado final mucho mayor que el escenario A. Esto demuestra que una Vanilla RNN da mayor importancia a la información reciente y constante, mientras que los eventos aislados pierden impacto con el tiempo debido al factor de olvido.
