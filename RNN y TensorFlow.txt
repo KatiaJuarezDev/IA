@@ -1,0 +1,84 @@
+============================================================
+
+                    KATIA JUÁREZ ARIAS
+
+============================================================
+
+IMPLEMENTACIÓN DE RNN Y LSTM
+
+1. RNN CON NUMPY (IMPLEMENTACIÓN MANUAL)
+
+Este código implementa una Red Neuronal Recurrente (RNN) desde cero utilizando la librería NumPy. Su objetivo es mostrar cómo funciona internamente el procesamiento de secuencias.
+
+Una RNN procesa datos secuenciales paso a paso, manteniendo una “memoria” mediante el estado oculto. En cada iteración, toma la entrada actual y el estado anterior para generar un nuevo estado y una salida.
+
+El modelo utiliza tres matrices de pesos:
+
+* W_xh: conecta la entrada con el estado oculto
+* W_hh: conecta el estado oculto anterior con el actual (memoria)
+* W_hy: conecta el estado oculto con la salida
+
+El estado oculto se calcula con la función de activación tanh, lo que permite introducir no linealidad en el modelo.
+
+Uso:
+Se puede utilizar para comprender cómo funcionan las RNN internamente, especialmente en el procesamiento de secuencias como series de tiempo o texto.
+
+Ejemplo de uso:
+Predecir valores en una serie temporal simple, como el comportamiento de una señal o datos de sensores.
+
+---
+
+2. LSTM CON TENSORFLOW
+
+Este código implementa una red neuronal basada en LSTM (Long Short-Term Memory), que es una versión avanzada de las RNN.
+
+Las LSTM están diseñadas para resolver el problema del gradiente desvanecido, lo que les permite recordar información durante secuencias más largas.
+
+El modelo realiza predicción de texto carácter por carácter:
+
+* Toma una secuencia de caracteres
+* Aprende patrones en el texto
+* Predice el siguiente carácter
+
+Se utilizan capas importantes como:
+
+* Embedding: convierte caracteres en vectores numéricos
+* LSTM: procesa la secuencia con memoria a largo plazo
+* Dense: genera la salida final con probabilidades
+
+Uso:
+Se puede utilizar para tareas de procesamiento de lenguaje natural, como generación de texto, autocompletado o chatbots simples.
+
+Ejemplo de uso:
+Un sistema que autocompleta frases, como cuando escribes en el celular y te sugiere la siguiente palabra.
+
+---
+
+DEFINICIONES IMPORTANTES
+
+RNN (Red Neuronal Recurrente):
+Modelo de red neuronal diseñado para trabajar con datos secuenciales, donde la salida depende de entradas anteriores.
+
+Estado oculto (Hidden State):
+Memoria interna de la red que guarda información de pasos anteriores.
+
+LSTM:
+Tipo de RNN que puede recordar información por más tiempo gracias a sus compuertas internas.
+
+Función de activación:
+Función que introduce no linealidad en la red (ejemplo: tanh, ReLU).
+
+Embedding:
+Representación vectorial de datos categóricos como palabras o caracteres.
+
+Secuencia:
+Conjunto de datos ordenados, como texto o series de tiempo.
+
+Forward Pass:
+Proceso en el que los datos pasan a través de la red para obtener una salida.
+
+Gradiente desvanecido:
+Problema en redes profundas donde los valores de error se vuelven muy pequeños y el modelo deja de aprender.
+
+---
+
