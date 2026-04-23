@@ -1,6 +1,6 @@
-===========================
+=
 APUNTES Y ACTIVIDADES DE IA 
-===========================
+=
 
 INSTITUTO TECNOLÓGICO DE MORELIA 
 SISTEMAS COMPUTACIONALES NOVENO SEMESTRE
