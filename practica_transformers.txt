@@ -1,0 +1,224 @@
+==============================================================
+                  
+                     KATIA JUÁREZ ARIAS
+
+==============================================================
+
+
+
+╔════════════════════════════════════════════════════════════╗
+║        SOLUCIÓN — ACTIVIDAD MANUAL PARTE 2                ║
+║                 ENTENDER TRANSFORMERS                     ║
+╚════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 6 — MATRIZ DE ATENCIÓN COMPLETA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ Paso 1 y 2 — Matriz puntuadas y normalizadas ]
+
+(Valores simplificados donde cada fila suma 100%)
+
+┌────────────┬─────┬───────┬──────────┬──────┬────────┐
+│ DESDE/HACIA│ LA  │ NIÑA  │ PEQUEÑA  │ COME │ FRUTA  │
+├────────────┼─────┼───────┼──────────┼──────┼────────┤
+│ LA         │10%  │ 60%   │ 10%      │10%   │10%     │
+│ NIÑA       │10%  │10%    │20%       │50%   │10%     │
+│ PEQUEÑA    │10%  │60%    │10%       │10%   │10%     │
+│ COME       │ 5%  │35%    │10%       │10%   │40%     │
+│ FRUTA      │ 5%  │10%    │ 5%       │60%   │20%     │
+└────────────┴─────┴───────┴──────────┴──────┴────────┘
+
+
+[ Paso 3 — Preguntas ]
+
+1) ¿La fila de COME se parece a la de FRUTA?
+   → No. COME atiende al sujeto y al objeto,
+     mientras que FRUTA se enfoca principalmente
+     en la acción COME.
+
+2) ¿Qué fila tiene atención más equilibrada?
+   → COME, porque necesita contexto completo
+     para entender la acción.
+
+3) ¿Qué pasa con 100 palabras?
+   → La matriz tendría 10,000 celdas (100x100).
+     El crecimiento cuadrático consume mucha RAM.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 7 — SOFTMAX A MANO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ División entre la suma total: 25.68 ]
+
+┌──────────┬──────────────┬──────────────┬─────────┐
+│ PALABRA  │ EXPONENCIAL  │ DIVISIÓN     │ % FINAL │
+├──────────┼──────────────┼──────────────┼─────────┤
+│ NIÑA     │ 20.09        │20.09/25.68   │ 78%     │
+│ PEQUEÑA  │ 1.65         │1.65/25.68    │  6%     │
+│ COME     │ 1.22         │1.22/25.68    │  5%     │
+│ FRUTA    │ 2.72         │2.72/25.68    │ 11%     │
+└──────────┴──────────────┴──────────────┴─────────┘
+
+
+¿Por qué no dividir directamente?
+→ Porque Softmax usa exponenciales para amplificar
+  diferencias y manejar números negativos,
+  permitiendo decisiones más claras.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 8 — MEZCLA DE “VECTORES CONTENIDO”
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ Cálculo para COME ]
+
+LA:
+0.05 × (1,1) = (0.05, 0.05)
+
+NIÑA:
+0.35 × (4,5) = (1.40, 1.75)
+
+PEQUEÑA:
+0.10 × (3,4) = (0.30, 0.40)
+
+COME:
+0.10 × (5,1) = (0.50, 0.10)
+
+FRUTA:
+0.40 × (6,3) = (2.40, 1.20)
+
+
+[ Resultado final ]
+
+Suma X:
+0.05 + 1.40 + 0.30 + 0.50 + 2.40 = 4.65
+
+Suma Y:
+0.05 + 1.75 + 0.40 + 0.10 + 1.20 = 3.50
+
+
+VECTOR FINAL:
+→ (4.65, 3.50)
+
+Interpretación:
+El vector queda entre NIÑA y FRUTA,
+mezclando ambos significados.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 9 — MÁSCARA DE PADDING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• ¿Por qué la Frase 2 necesita menos celdas tachadas?
+  → Porque ocupa todos los espacios con palabras reales.
+
+• ¿Qué pasa si el modelo atiende a PAD?
+  → Aprende ruido y patrones falsos,
+    afectando los vectores reales.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 10 — CROSS-ATTENTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ Palabra faltante = COFFEE ]
+
+┌─────────────────────┬─────┬─────────┬───────┐
+│ INGLÉS / ESPAÑOL    │ YO  │ QUIERO  │ CAFE  │
+├─────────────────────┼─────┼─────────┼───────┤
+│ PALABRA 3 (hueco)   │ 5%  │ 15%     │ 80%   │
+└─────────────────────┴─────┴─────────┴───────┘
+
+
+Respuestas:
+
+1) ¿CAFE debería ganar?
+   → Sí, porque es la traducción correcta.
+
+2) ¿La fila de I mira a YO?
+   → Sí, es coherente para traducir pronombres.
+
+3) Diferencia clave:
+   → Cross-attention conecta Decoder ↔ Encoder,
+     es decir, un idioma con otro.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 11 — BERT Y PALABRA TAPADA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• ¿Por qué COME supera a VERDE?
+  → Porque tiene sentido semántico y gramatical.
+
+• ¿DUERME tiene sentido?
+  → Parcialmente, pero choca con “PESCADO”.
+
+• ¿Por qué es importante ver PESCADO?
+  → Porque el contexto posterior define la acción.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 12 — DOS CAPAS DE ATENCIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reflexión:
+
+En la segunda capa, FRUTA ya entiende que
+COME contiene información enriquecida sobre
+la NIÑA y la acción completa.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 13 — RNN VS TRANSFORMER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1) Saltos de A → E
+
+   RNN:
+   → 4 saltos secuenciales
+
+   Atención:
+   → 1 salto directo
+
+
+2) Con 100 palabras
+
+   RNN:
+   → crecimiento lineal
+
+   Atención:
+   → 10,000 conexiones (cuadrático)
+
+
+3) ¿Por qué usar Transformers?
+
+   • Paralelismo
+   • Mayor velocidad en GPU
+   • Menor pérdida de contexto
+   • Mejor manejo de textos largos
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ACTIVIDAD 14 — ESCALADO Y SATURACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1) Softmax [8,2,2,2]
+
+→ El 8 domina completamente.
+→ Las demás palabras casi desaparecen.
+
+
+2) Softmax [4,1,1,1]
+
+→ Sigue ganando el 4,
+  pero las demás aún aportan información.
+
+
+3) Conclusión
+
+Escalar evita que Softmax se sature,
+manteniendo una distribución más equilibrada
+y útil para el aprendizaje.
