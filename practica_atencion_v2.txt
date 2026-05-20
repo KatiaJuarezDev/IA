@@ -1,0 +1,197 @@
+============================================================
+
+                    KATIA JUÁREZ ARIAS
+
+============================================================
+
+Actividad 6: Matriz de atencion completa
+Frase: EL PERRO VIEJO MUERDE HUESO
+
+Asignacion de puntos (0-10) y normalizacion a porcentajes por fila:
+(La logica: Cada palabra califica que tan dependiente es de las demas para entender su rol en la oracion).
+
+1. Fila de "EL":
+Puntajes: EL -> 3, PERRO -> 10, VIEJO -> 3, MUERDE -> 1, HUESO -> 0 = 17
+Porcentajes: EL(18%), PERRO(59%), VIEJO(17%), MUERDE(6%), HUESO(0%)
+Razon: El articulo depende del sustantivo al que modifica.
+
+2. Fila de "PERRO":
+Puntajes: EL -> 3, PERRO -> 4, VIEJO -> 9, MUERDE -> 10, HUESO -> 0 = 26
+Porcentajes: EL(12%), PERRO(15%), VIEJO(35%), MUERDE(38%), HUESO(0%)
+Razon: Se define por sus adjetivos y la accion que realiza.
+
+3. Fila de "VIEJO":
+Puntajes: EL -> 0, PERRO -> 10, VIEJO -> 5, MUERDE -> 2, HUESO -> 0 = 17
+Porcentajes: EL(0%), PERRO(59%), VIEJO(29%), MUERDE(12%), HUESO(0%)
+Razon: El adjetivo depende casi exclusivamente del sustantivo que describe.
+
+4. Fila de "MUERDE":
+Puntajes: EL -> 0, PERRO -> 9, VIEJO -> 2, MUERDE -> 3, HUESO -> 10 = 24
+Porcentajes: EL(0%), PERRO(37%), VIEJO(8%), MUERDE(13%), HUESO(42%)
+Razon: El verbo busca a su sujeto (perro) y su objeto directo (hueso).
+
+5. Fila de "HUESO":
+Puntajes: EL -> 0, PERRO -> 3, VIEJO -> 0, MUERDE -> 10, HUESO -> 4 = 17
+Porcentajes: EL(0%), PERRO(18%), VIEJO(0%), MUERDE(59%), HUESO(23%)
+Razon: El objeto directo depende principalmente de la accion que recae sobre el.
+
+Respuestas:
+1. ¿La fila de MUERDE se parece a la de HUESO? ¿Por que deberian diferir?
+No se parecen. Difieren porque buscan cosas distintas: "MUERDE" busca a su sujeto (perro) y su objeto (hueso). "HUESO" busca principalmente la accion (muerde) que recae sobre el para entender que esta siendo mordido.
+
+2. ¿Alguna fila reparte atencion casi pareja?
+Si la frase tuviera una conjuncion (como "Y"), esa palabra repartiria atencion pareja a los dos elementos que une, actuando como un puente.
+
+3. ¿Cuantas celdas tendria una tabla de 100 palabras?
+Tendria 100 x 100 = 10,000 celdas. Esto explica el coste de memoria: si duplicas las palabras (200), la tabla no se duplica, se cuadruplica (40,000 celdas), consumiendo exponencialmente la memoria de la tarjeta grafica.
+
+--------------------------------------------------
+
+Actividad 7: Softmax a mano (de puntajes a probabilidades)
+
+Datos: PERRO (2.5), VIEJO (0.8), MUERDE (0.3), HUESO (1.2)
+Calculo con exponencial (e^x):
+e^2.5 = 12.18
+e^0.8 = 2.23
+e^0.3 = 1.35
+e^1.2 = 3.32
+Suma total = 19.08
+
+Porcentajes (Softmax):
+PERRO: (12.18 / 19.08) * 100 = 64%
+VIEJO: (2.23 / 19.08) * 100 = 12%
+MUERDE: (1.35 / 19.08) * 100 = 7%
+HUESO: (3.32 / 19.08) * 100 = 17%
+
+Respuesta:
+¿Por que no basta con dividir los puntajes 0-10 entre su suma?
+Porque Softmax usa exponenciales para "exagerar" las diferencias. Si solo dividieramos, un puntaje de 2.5 vs 1.2 daria porcentajes de 52% y 25%. Al usar e^x, el 2.5 aplasta al 1.2 (64% vs 17%), lo que ayuda a la IA a tomar decisiones mas definitivas y claras, eliminando el "ruido".
+
+--------------------------------------------------
+
+Actividad 8: Mezcla de "vectores contenido" (Values)
+Vectores base: EL(1,2), PERRO(5,4), VIEJO(3,5), MUERDE(6,2), HUESO(4,1)
+Porcentajes (pesos) de MUERDE: EL(0.05), PERRO(0.37), VIEJO(0.08), MUERDE(0.13), HUESO(0.37)
+
+Calculo del nuevo vector de MUERDE:
+Multiplicamos cada vector por su porcentaje y sumamos las 'x' y las 'y':
+
+Eje X: (1*0.05) + (5*0.37) + (3*0.08) + (6*0.13) + (4*0.37)
+X = 0.05 + 1.85 + 0.24 + 0.78 + 1.48 = 4.40
+
+Eje Y: (2*0.05) + (4*0.37) + (5*0.08) + (2*0.13) + (1*0.37)
+Y = 0.10 + 1.48 + 0.40 + 0.26 + 0.37 = 2.61
+
+Vector salida de MUERDE = (4.40, 2.61)
+
+Resumen: Al inicio, MUERDE estaba en (6,2). Despues de atender a las demas palabras, su nuevo vector (4.40, 2.61) lo ha acercado "espacialmente" a PERRO y HUESO. El verbo "absorbio" el significado de sus vecinas.
+
+--------------------------------------------------
+
+Actividad 9: Mascara de padding
+Frase 1: EL PERRO MUERDE [PAD] [PAD]
+
+Cuadricula 5x5:
+Palabra       | EL  PERRO  MUERDE  [PAD]  [PAD]
+EL            |  v    v       v      x      x
+PERRO         |  v    v       v      x      x
+MUERDE        |  v    v       v      x      x
+[PAD]         |  x    x       x      x      x
+[PAD]         |  x    x       x      x      x
+
+Respuestas:
+¿Por que Frase 2 (sin PAD) no necesita celdas tachadas?
+Porque todas sus posiciones contienen informacion real y util para el contexto.
+¿Que pasaria si el modelo atendiera al PAD?
+El modelo se confundiria intentando encontrar conexiones logicas con el "vacio", diluyendo la atencion de las palabras reales y aprendiendo patrones falsos.
+
+--------------------------------------------------
+
+Actividad 10: Atencion cruzada (Cross-attention)
+Encoder (Español): YO TENGO HAMBRE
+Decoder (Ingles generado hasta ahora): I AM _
+
+Puntajes para adivinar el hueco 3:
+Hacia YO -> 1
+Hacia TENGO -> 2
+Hacia HAMBRE -> 10
+
+Porcentajes: YO(8%), TENGO(15%), HAMBRE(77%)
+
+Respuestas:
+1. ¿HAMBRE deberia ganar? ¿Por que?
+Si, porque el Decoder ya tradujo "YO" y "TENGO" (aproximado). Para saber cual es la siguiente palabra, debe mirar directamente al objeto semantico principal de la oracion original (HAMBRE).
+2. ¿La fila de "I" podria mirar mucho a "YO"?
+Si, tendria todo el sentido, ya que en el primer paso de traduccion, el Decoder necesita saber quien es el sujeto de la accion.
+
+--------------------------------------------------
+
+Actividad 11: Adivinar la palabra tapada (BERT / MLM)
+Frase: EL LOBO _ CARNE
+Candidatos: DEVORA, DUERME, AZUL, RAPIDO
+
+Puntajes para el hueco (basado en compatibilidad con vecinos):
+DEVORA -> 10 (Encaja con un sujeto animal depredador y un objeto comestible)
+DUERME -> 3 (Encaja con el lobo, pero "duerme carne" no tiene sentido sintactico)
+AZUL -> 0 (No encaja sintacticamente despues del sujeto)
+RAPIDO -> 1 (Solo podria encajar como adverbio mal colocado)
+
+Respuestas:
+1. ¿Por que DEVORA supera a AZUL?
+Porque la IA detecta que falta una accion (verbo) entre el sujeto y el objeto.
+2. ¿DUERME podria tener sentido?
+Teniendo atencion bidireccional, DUERME atiende bien al lado izquierdo (LOBO), pero fracasa rotundamente al atender al lado derecho (CARNE).
+3. ¿Por que BERT necesita ver CARNE?
+Porque si solo viera "EL LOBO", "DUERME" seria una respuesta perfecta. Ver el contexto derecho (CARNE) es lo que lo obliga a buscar un verbo transitivo como "DEVORA".
+
+--------------------------------------------------
+
+Actividad 12: Dos capas de atencion
+Perfiles actuales (Capa 1): EL(10), PERRO(44), VIEJO(33), MUERDE(55), HUESO(62)
+Mision: HUESO vuelve a atender (Capa 2)
+
+Puntajes (0-10) desde HUESO hacia:
+EL -> 0
+PERRO -> 7 (Ahora sabe que Perro esta conectado a Muerde)
+VIEJO -> 2
+MUERDE -> 10 (Sigue siendo su verbo directo)
+HUESO -> 4
+
+Resumen:
+"En la segunda capa, HUESO ya 'sabe' indirectamente que fue mordido por un perro, porque la primera capa contamino a MUERDE con el significado de PERRO, y ahora HUESO se conecta con ese MUERDE ya actualizado."
+
+--------------------------------------------------
+
+Actividad 13: RNN vs Transformer
+Modo RNN (A -> B -> C -> D -> E)
+- Enlaces de A a E: 4 saltos. (La informacion se degrada en cada salto).
+
+Modo Atencion (Matriz todos miran a todos)
+- Celdas/Enlaces: 5x5 = 25 conexiones directas. (A llega a E en 1 solo salto).
+
+Respuestas:
+1. Saltos en RNN = 4. Saltos en Atencion = 1.
+2. Crecimiento en 100 palabras: RNN crece linealmente (100 enlaces secuenciales). Transformer crece cuadradamente (10,000 celdas).
+3. Usamos Transformers porque la calidad no se pierde sin importar la distancia, y el procesamiento es paralelo (se calcula todo de golpe), mientras que la RNN es lenta porque espera a terminar una palabra para procesar la siguiente.
+
+--------------------------------------------------
+
+Actividad 14: Escalar por Raiz de d_k
+Puntajes brutos: [7, 3, 3, 3] -> Suma: 16
+
+Softmax sin escalar:
+e^7 = 1096.6
+e^3 = 20.1
+(La primera palabra acapararia el 93.5% de la atencion, saturando la red y borrando al resto).
+
+Puntajes escalados (Dividiendo entre 2): [3.5, 1.5, 1.5, 1.5]
+Softmax escalado:
+e^3.5 = 33.1
+e^1.5 = 4.5
+Suma e^x = 33.1 + 4.5 + 4.5 + 4.5 = 46.6
+Porcentajes:
+Palabra 1: 33.1 / 46.6 = 71%
+Resto: 4.5 / 46.6 = 9.7% cada una.
+
+Conclusion:
+La palabra ganadora sigue ganando (71%), pero ahora las demas palabras (9.7%) aun conservan una fraccion de la atencion (sus gradientes). "Dividir entre la raiz es bajar el volumen para que la palabra dominante no apague por completo las voces menores".
